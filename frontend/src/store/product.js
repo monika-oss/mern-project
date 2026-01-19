@@ -7,14 +7,28 @@ export const useProductStore = create((set) => ({
 		if (!newProduct.name || !newProduct.image || !newProduct.price) {
 			return { success: false, message: "Please fill in all fields." };
 		}
+
+		let body;
+		let headers = {};
+
+		if (newProduct.image instanceof File) {
+			const formData = new FormData();
+			formData.append("name", newProduct.name);
+			formData.append("price", newProduct.price);
+			formData.append("image", newProduct.image);
+			body = formData;
+		} else {
+			body = JSON.stringify(newProduct);
+			headers["Content-Type"] = "application/json";
+		}
+
 		const res = await fetch("/api/products", {
 			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(newProduct),
+			headers: headers,
+			body: body,
 		});
 		const data = await res.json();
+		if (!data.success) return { success: false, message: data.message };
 		set((state) => ({ products: [...state.products, data.data] }));
 		return { success: true, message: "Product created successfully" };
 	},

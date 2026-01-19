@@ -7,156 +7,88 @@ const CreatePage = () => {
     price: '',
     image: '',
   });
-  const [darkMode] = useState(false);
 
   const { createProduct } = useProductStore();
 
-  const showToast = (title, message, type) => {
-    // Simple toast implementation - you can replace with react-toastify
-    alert(`${title}: ${message}`);
-  };
-
   const handleAddProduct = async () => {
     const { success, message } = await createProduct(newProduct);
-    if (!success) {
-      showToast('Error', message, 'error');
-    } else {
-      showToast('Success', message, 'success');
+    alert(message);
+    if (success) {
+      setNewProduct({ name: '', price: '', image: '' });
     }
-    setNewProduct({ name: '', price: '', image: '' });
   };
 
   const styles = {
     container: {
-      maxWidth: '640px',
-      margin: '0 auto',
-      padding: '2rem 1rem',
+      padding: '3rem 0',
+      maxWidth: '600px',
     },
-    vstack: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '2rem',
+    card: {
+      backgroundColor: '#ffffff',
+      borderRadius: '1rem',
+      padding: '2rem',
+      boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+      border: 'none',
     },
     heading: {
-      fontSize: '2.5rem',
+      fontSize: '32px',
       fontWeight: 'bold',
       textAlign: 'center',
       marginBottom: '2rem',
-      color: darkMode ? '#e2e8f0' : '#1a202c',
-    },
-    box: {
-      width: '100%',
-      backgroundColor: darkMode ? '#1a202c' : '#ffffff',
-      padding: '1.5rem',
-      borderRadius: '0.5rem',
-      boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-    },
-    inputGroup: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '1rem',
+      color: '#1a202c',
     },
     input: {
       padding: '0.75rem 1rem',
+      borderRadius: '0.5rem',
       border: '1px solid #e2e8f0',
-      borderRadius: '0.375rem',
-      fontSize: '1rem',
+      marginBottom: '1rem',
       width: '100%',
-      backgroundColor: darkMode ? '#2d3748' : '#ffffff',
-      color: darkMode ? '#e2e8f0' : '#1a202c',
-      outline: 'none',
-      transition: 'all 0.2s',
-    },
-    inputFocus: {
-      borderColor: '#3182ce',
-      boxShadow: '0 0 0 1px #3182ce',
     },
     button: {
-      width: '100%',
-      padding: '0.75rem 1.5rem',
       backgroundColor: '#3182ce',
       color: '#ffffff',
+      fontWeight: '600',
+      padding: '0.75rem',
+      borderRadius: '0.5rem',
       border: 'none',
-      borderRadius: '0.375rem',
-      fontSize: '1rem',
-      fontWeight: '500',
-      cursor: 'pointer',
+      width: '100%',
+      marginTop: '1rem',
       transition: 'all 0.2s',
-    },
-    buttonHover: {
-      backgroundColor: '#2c5282',
-    },
+      cursor: 'pointer',
+    }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.vstack}>
-        <h1 style={styles.heading}>Create New Product</h1>
+    <div className="container" style={styles.container}>
+      <h1 style={styles.heading}>Create New Product</h1>
 
-        <div style={styles.box}>
-          <div style={styles.inputGroup}>
-            <input
-              style={styles.input}
-              type="text"
-              placeholder="Product Name"
-              name="name"
-              value={newProduct.name}
-              onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-              onFocus={(e) => {
-                e.target.style.borderColor = styles.inputFocus.borderColor;
-                e.target.style.boxShadow = styles.inputFocus.boxShadow;
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#e2e8f0';
-                e.target.style.boxShadow = 'none';
-              }}
-            />
-            <input
-              style={styles.input}
-              type="number"
-              placeholder="Price"
-              name="price"
-              value={newProduct.price}
-              onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-              onFocus={(e) => {
-                e.target.style.borderColor = styles.inputFocus.borderColor;
-                e.target.style.boxShadow = styles.inputFocus.boxShadow;
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#e2e8f0';
-                e.target.style.boxShadow = 'none';
-              }}
-            />
-            <input
-              style={styles.input}
-              type="text"
-              placeholder="Image URL"
-              name="image"
-              value={newProduct.image}
-              onChange={(e) => setNewProduct({ ...newProduct, image: e.target.value })}
-              onFocus={(e) => {
-                e.target.style.borderColor = styles.inputFocus.borderColor;
-                e.target.style.boxShadow = styles.inputFocus.boxShadow;
-              }}
-              onBlur={(e) => {
-                e.target.style.borderColor = '#e2e8f0';
-                e.target.style.boxShadow = 'none';
-              }}
-            />
-
-            <button
-              style={styles.button}
-              onClick={handleAddProduct}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = styles.button.backgroundColor;
-              }}
-            >
-              Add Product
-            </button>
-          </div>
+      <div style={styles.card}>
+        <div className="d-flex flex-column">
+          <input
+            type="text"
+            placeholder="Product Name"
+            className="form-control"
+            style={styles.input}
+            value={newProduct.name}
+            onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            className="form-control"
+            style={styles.input}
+            value={newProduct.price}
+            onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
+          />
+          <input
+            type='file'
+            className='form-control'
+            style={styles.input}
+            onChange={(e) => setNewProduct({ ...newProduct, image: e.target.files[0] })}
+          />
+          <button style={styles.button} onClick={handleAddProduct}>
+            Add Product
+          </button>
         </div>
       </div>
     </div>
